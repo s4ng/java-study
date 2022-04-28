@@ -13,8 +13,8 @@ public class MultiThread extends Thread {
         synchronized ( this ) {
             try {
                 while(sumData.getCount() <= 100) {
-                    System.out.println("Thread[" + threadNum + "] : " + sumData.getSum() + " + " +
-                            sumData.getCount() + " = " + (sumData.getCount() + sumData.getSum()));
+                    System.out.println("Thread[" + threadNum + "] : n = " + sumData.getCount() + ", sum = " +
+                            (sumData.getCount() + sumData.getSum()));
                     sumData.addNumber();
                 }
             } catch (Exception e) {
