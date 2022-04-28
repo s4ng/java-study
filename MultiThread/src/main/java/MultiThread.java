@@ -2,19 +2,24 @@ public class MultiThread extends Thread {
 
     private int threadNum;
 
-    MultiThread(int threadNum) {
+    private SumData sumData;
+
+    MultiThread(int threadNum, SumData sumData) {
         this.threadNum = threadNum;
+        this.sumData = sumData;
     }
 
     public void run() {
-        try {
-            while(SumData.getCount() <= 100) {
-                System.out.println("Thread[" + threadNum + "] : " + SumData.getSum() + " + " +
-                        SumData.getCount() + " = " + (SumData.getCount() + SumData.getSum()));
-                SumData.addNumber();
+        synchronized ( this ) {
+            try {
+                while(sumData.getCount() <= 100) {
+                    System.out.println("Thread[" + threadNum + "] : " + sumData.getSum() + " + " +
+                            sumData.getCount() + " = " + (sumData.getCount() + sumData.getSum()));
+                    sumData.addNumber();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }
