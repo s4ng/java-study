@@ -1,17 +1,22 @@
 public class SumData {
 
-    private static int count = 0;
-    private static int sum = 0;
+    private int count;
+    private int sum;
 
-    public static int getCount() {
+    public SumData() {
+        this.count = 1;
+        this.sum = 0;
+    }
+
+    public int getCount() {
         return count;
     }
 
-    public static int getSum() {
+    public int getSum() {
         return sum;
     }
 
-    public static void addNumber() {
+    public void addNumber() {
         sum += count++;
     }
 }
