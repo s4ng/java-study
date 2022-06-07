@@ -5,28 +5,27 @@ import java.util.Deque;
 
 public class LRUCache {
 
-	private final Deque< Integer > dq;
-	private final Integer size;
+	public static final Deque< Integer > dq = new ArrayDeque<>();
+	private static Integer size;
 
 	public LRUCache( int size ) {
 
 		this.size = size;
-		this.dq = new ArrayDeque<>( size );
 	}
 
-	public void cacheData( Integer num ) {
+	public static synchronized void cacheData( Integer num ) {
 
-		String condition = "Miss ";
+		String condition = "Fault! ";
 		if ( dq.contains( num ) ) {
 			dq.removeFirstOccurrence( num );
-			condition = "Hit  ";
+			condition = "Hit!   ";
 		}
 		addDataToDq( num );
 
-		printDq( condition );
+		printDq( num, condition );
 	}
 
-	private void addDataToDq( Integer num ) {
+	private static void addDataToDq( Integer num ) {
 
 		if ( dq.size() == size ) {
 			dq.removeLast();
@@ -35,7 +34,7 @@ public class LRUCache {
 
 	}
 
-	public void printDq( String condition ) {
+	public static void printDq( Integer num, String condition ) {
 
 		if ( dq.isEmpty() ) {
 			System.out.println( "Empty" );
@@ -44,12 +43,15 @@ public class LRUCache {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append( condition );
+		sb.append( num ).append( " -> " );
+		sb.append( "[ " );
 
 		for ( Integer item : dq ) {
-			sb.append( item ).append( " " );
+			sb.append( item ).append( ", " );
 		}
 
-		sb.setLength( sb.length() - 1 );
+		sb.setLength( sb.length() - 2 );
+		sb.append( " ]" );
 
 		System.out.println( sb );
 	}

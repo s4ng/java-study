@@ -1,16 +1,27 @@
 package com.company;
 
+import java.util.Scanner;
+
 public class Main {
 
-    public static void main(String[] args) {
+	public static void main( String[] args ) {
 
-        int[] arr = {1, 2, 3, 4, 2, 3 ,4, 5, 4, 3, 2, 7};
-        int cacheSize = 5;
+		Scanner sc = new Scanner( System.in );
 
-        LRUCache cache = new LRUCache( cacheSize );
+		int threadSize;
+		int cacheSize;
 
-        for(int i : arr) {
-            cache.cacheData( i );
-        }
-    }
+		System.out.print( "thread size = " );
+		threadSize = sc.nextInt();
+		System.out.print( "cache size = " );
+		cacheSize = sc.nextInt();
+
+		new LRUCache( cacheSize );
+
+		Runnable task = new CacheThread();
+		for ( int i = 0; i < threadSize; i++ ) {
+			Thread thread = new Thread( task );
+			thread.start();
+		}
+	}
 }
