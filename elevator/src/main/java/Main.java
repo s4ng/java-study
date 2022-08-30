@@ -1,12 +1,26 @@
-import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
+
     public static void main(String[] args) throws InterruptedException {
+
         Elevator e1 = new Elevator(null, 0, 1);
         Elevator e2 = new Elevator(null, 0, 1);
         Elevator e3 = new Elevator(null, 0, 1);
+
+        BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(1);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, blockingQueue);
+
+        threadPoolExecutor.execute(new Task(e1));
+        threadPoolExecutor.execute(new Task(e2));
+        threadPoolExecutor.execute(new Task(e3));
 
         while(true) {
             Thread.sleep(1000L);
@@ -56,7 +70,7 @@ public class Main {
     }
 
     public static void clearScreen() {
-        for(int i = 0; i < 50; i++) {
+        for(int i = 0; i < 10; i++) {
             System.out.println("\n");
         }
     }
@@ -87,8 +101,8 @@ public class Main {
 
         public int getPeopleWeight() {
             int result = 0;
-            for(int i = 0; i < people.size(); i++) {
-                result += people.get(i);
+            for ( Integer person : people ) {
+                result += person;
             }
             return result;
         }
@@ -114,6 +128,20 @@ public class Main {
             this.weight = weight;
             this.people = new ArrayList<>();
             this.flour = flour;
+        }
+    }
+
+    static class Task implements Runnable {
+
+        private final Elevator elevator;
+
+        public Task(Elevator elevator) {
+            this.elevator = elevator;
+        }
+
+        @Override
+        public void run() {
+            return;
         }
     }
 }
