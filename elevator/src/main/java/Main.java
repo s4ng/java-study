@@ -15,12 +15,10 @@ public class Main {
         Elevator e2 = new Elevator(null, 0, 1);
         Elevator e3 = new Elevator(null, 0, 1);
 
-        BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(1);
+        BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, blockingQueue);
 
-        threadPoolExecutor.execute(new Task(e1));
-        threadPoolExecutor.execute(new Task(e2));
-        threadPoolExecutor.execute(new Task(e3));
+        
 
         while(true) {
             Thread.sleep(1000L);
@@ -133,15 +131,39 @@ public class Main {
 
     static class Task implements Runnable {
 
-        private final Elevator elevator;
+        Elevator e1;
+        Elevator e2;
+        Elevator e3;
+        Waiting waiting;
 
-        public Task(Elevator elevator) {
-            this.elevator = elevator;
+        public Task(Waiting waiting, Elevator e1, Elevator e2, Elevator e3) {
+            this.waiting = waiting;
+            this.e1 = e1;
+            this.e2 = e2;
+            this.e3 = e3;
         }
 
         @Override
         public void run() {
-            return;
+            // TODO
+        }
+    }
+
+    static class Waiting {
+        int nowFlour;
+        List<WaitingPerson> waitingPeople;
+        public Waiting(int nowFlour, List<WaitingPerson> waitingPeople) {
+            this.nowFlour = nowFlour;
+            this.waitingPeople = waitingPeople;
+        }
+    }
+
+    static class WaitingPerson {
+        int weight;
+        int goingFlour;
+        public WaitingPerson(int weight, int goingFlour) {
+            this.weight = weight;
+            this.goingFlour = goingFlour;
         }
     }
 }
