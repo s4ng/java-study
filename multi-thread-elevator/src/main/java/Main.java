@@ -1,5 +1,6 @@
 import lombok.*;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -26,10 +27,9 @@ public class Main {
 			threadPoolExecutor.execute( new Task( waitingQueue.poll() ) );
 		}
 
-		Thread.sleep( 900L );
 		while ( true ) {
 			printDashBoard( e1, e2, e3 );
-			Thread.sleep( 1000L );
+			Thread.sleep( 500L );
 		}
 	}
 
@@ -72,13 +72,12 @@ public class Main {
 		@SneakyThrows
 		@Override
 		public synchronized void run() {
-			Elevator elevator = null;
+			Elevator elevator = chooseElevator( waiting );
 
 			while ( elevator == null ) {
 				Thread.sleep( 1000L );
 				elevator = chooseElevator( waiting );
 			}
-			logs.add( waiting.nowFlour + "층에서 " + 1 + "명 탑승함." );
 			elevator.setMoving( true );
 			while ( waiting.getNowFlour() != elevator.getFlour() ) {
 				Thread.sleep( 1000L );
@@ -90,6 +89,7 @@ public class Main {
 					elevator.setFlour( elevator.getFlour() - 1 );
 				}
 			}
+			logs.add( waiting.nowFlour + "층에서 " + 1 + "명 탑승함." );
 			Thread.sleep( 1000L );
 			elevator.setIsUp( null );
 			elevator.addPeople( waiting.weight );
@@ -180,6 +180,7 @@ public class Main {
 			System.out.println( logs.get( logs.size() - 1 ) );
 		}
 	}
+
 	private static String printElevator( Elevator elevator, int flour ) {
 		StringBuilder sb = new StringBuilder();
 		if ( elevator.getFlour() != flour ) {
@@ -198,13 +199,13 @@ public class Main {
 	}
 
 	private static void printLine() {
-		System.out.println( "-----------------------------------------------------------------------------------------" );
+		System.out.println( "-------------------------------------------------------------------------" );
 	}
 
 	public static void clearScreen() {
-		for ( int i = 0; i < 10; i++ ) {
-			System.out.println( "\n" );
+//		System.out.println( new String( new char[ 30 ] ).replace( "\0", "\r\n" ) );
+		for ( int i = 0; i < 20; i++ ) {
+			System.out.println( "\b" );
 		}
 	}
-
 }

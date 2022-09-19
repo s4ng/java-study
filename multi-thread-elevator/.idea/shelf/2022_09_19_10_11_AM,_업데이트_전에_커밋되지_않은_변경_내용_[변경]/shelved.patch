@@ -1,0 +1,83 @@
+Index: ../elevator/src/main/java/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import java.util.ArrayDeque;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Queue;\nimport java.util.concurrent.ArrayBlockingQueue;\nimport java.util.concurrent.BlockingQueue;\nimport java.util.concurrent.ThreadPoolExecutor;\nimport java.util.concurrent.TimeUnit;\n\npublic class Main {\n\n    public static void main(String[] args) throws InterruptedException {\n\n        Elevator e1 = new Elevator(null, 0, 1);\n        Elevator e2 = new Elevator(null, 0, 1);\n        Elevator e3 = new Elevator(null, 0, 1);\n\n        BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);\n        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, blockingQueue);\n\n        \n\n        while(true) {\n            Thread.sleep(1000L);\n            printDashBoard(e1, e2, e3);\n        }\n    }\n\n    private static void printDashBoard(Elevator e1, Elevator e2, Elevator e3) {\n        int one, two ,three;\n        clearScreen();\n        printLine();\n        for(int i = 10; i >= 1; i--) {\n            System.out.println(i + (i == 10 ? \"층\" : \" 층\") + \"  |    \" + printElevator(e1, i) +\n                    printElevator(e2, i)+ printElevator(e3, i));\n        }\n        printLine();\n        System.out.println(\"[엘리베이터]\");\n        System.out.println(\"- 1호기 : 현재 위치 : \" + (e1.flour == 10 ? \"10층\" : \" \" + e1.flour + \"층\")\n                + \" / \" + \"방향 : \" + e1.getIsUpToString() + \" / 적재량 : \" + e1.getWeight() + \" / 인원수 : \" + e1.getPeopleCount());\n        System.out.println(\"- 2호기 : 현재 위치 : \" + (e2.flour == 10 ? \"10층\" : \" \" + e2.flour + \"층\")\n                + \" / \" + \"방향 : \" + e2.getIsUpToString() + \" / 적재량 : \" + e2.getWeight() + \" / 인원수 : \" + e2.getPeopleCount());\n        System.out.println(\"- 3호기 : 현재 위치 : \" + (e3.flour == 10 ? \"10층\" : \" \" + e3.flour + \"층\")\n                + \" / \" + \"방향 : \" + e3.getIsUpToString() + \" / 적재량 : \" + e3.getWeight() + \" / 인원수 : \" + e3.getPeopleCount());\n\n        System.out.println(\"[최근 이벤트]\");\n    }\n\n    private static String printElevator(Elevator elevator, int flour) {\n        StringBuilder sb = new StringBuilder();\n        if(elevator.getFlour() != flour) {\n            sb.append(\" [                 ] \");\n        } else {\n            sb.append(\" [ \");\n            sb.append(elevator.getIsUp() == null ? \"ST :  \" : ( elevator.getIsUp() ? \"UP : \"  : \"DN :  \"));\n            sb.append(elevator.getWeight()).append(\"/1000\");\n            if(sb.length() <= 19) {\n                sb.append(\" \".repeat(Math.max(0, 19 - sb.length())));\n            }\n            sb.append(\"] \");\n        }\n\n        return sb.toString();\n    }\n\n    private static void printLine() {\n        System.out.println(\"-----------------------------------------------------------------------------------------\");\n    }\n\n    public static void clearScreen() {\n        for(int i = 0; i < 10; i++) {\n            System.out.println(\"\\n\");\n        }\n    }\n\n    public static class Elevator {\n        Boolean isUp;\n        List<Integer> people;\n        int flour;\n        int weight;\n\n        public Boolean getIsUp() {\n            return this.isUp;\n        }\n\n        public String getIsUpToString() {\n            if(isUp == null) {\n                return \"STOP\";\n            } else if (isUp) {\n                return \"UP  \";\n            } else {\n                return \"DOWN\";\n            }\n        }\n\n        public int getWeight() {\n            return this.weight;\n        }\n\n        public int getPeopleWeight() {\n            int result = 0;\n            for ( Integer person : people ) {\n                result += person;\n            }\n            return result;\n        }\n\n        public int getFlour() {\n            return this.flour;\n        }\n\n        public int getPeopleCount() {\n            return this.people.size();\n        }\n\n        public void setFlour(int flour) {\n            this.flour = flour;\n        }\n\n        public void addPeople(int peopleWeight) {\n            people.add(peopleWeight);\n        }\n\n        public Elevator(Boolean isUp, int weight, int flour) {\n            this.isUp = isUp;\n            this.weight = weight;\n            this.people = new ArrayList<>();\n            this.flour = flour;\n        }\n    }\n\n    static class Task implements Runnable {\n\n        Elevator e1;\n        Elevator e2;\n        Elevator e3;\n        Waiting waiting;\n\n        public Task(Waiting waiting, Elevator e1, Elevator e2, Elevator e3) {\n            this.waiting = waiting;\n            this.e1 = e1;\n            this.e2 = e2;\n            this.e3 = e3;\n        }\n\n        @Override\n        public void run() {\n            // TODO\n        }\n    }\n\n    static class Waiting {\n        int nowFlour;\n        List<WaitingPerson> waitingPeople;\n        public Waiting(int nowFlour, List<WaitingPerson> waitingPeople) {\n            this.nowFlour = nowFlour;\n            this.waitingPeople = waitingPeople;\n        }\n    }\n\n    static class WaitingPerson {\n        int weight;\n        int goingFlour;\n        public WaitingPerson(int weight, int goingFlour) {\n            this.weight = weight;\n            this.goingFlour = goingFlour;\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/../elevator/src/main/java/Main.java b/../elevator/src/main/java/Main.java
+--- a/../elevator/src/main/java/Main.java	(revision a52ce004ae51ee6de8622f0a52624e7f574c9c3a)
++++ b/../elevator/src/main/java/Main.java	(date 1661827235501)
+@@ -18,7 +18,7 @@
+         BlockingQueue<Runnable> blockingQueue = new ArrayBlockingQueue<>(10);
+         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(3, 3, 0, TimeUnit.SECONDS, blockingQueue);
+ 
+-        
++
+ 
+         while(true) {
+             Thread.sleep(1000L);
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"a3ff6148-0f89-46e9-abfa-da2e567e06bb\" name=\"변경\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/multi-thread-elevator\" beforeDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\n  </component>\n  <component name=\"ProjectId\" id=\"2CbSD51s1Xyg6iiJCVcO1Pc7zDz\" />\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"WebServerToolWindowFactoryState\": \"false\",\n    \"last_opened_file_path\": \"C:/Users/zalcl/OneDrive/문서/project/java-study/multi-thread-elevator\",\n    \"settings.editor.selected.configurable\": \"MTConfigurable\"\n  }\n}]]></component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"애플리케이션 수준\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"디폴트 작업\">\n      <changelist id=\"a3ff6148-0f89-46e9-abfa-da2e567e06bb\" name=\"변경\" comment=\"\" />\n      <created>1659069669103</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1659069669103</updated>\n      <workItem from=\"1659069670357\" duration=\"75000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision a52ce004ae51ee6de8622f0a52624e7f574c9c3a)
++++ b/.idea/workspace.xml	(date 1663549855880)
+@@ -1,14 +1,35 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="AutoImportSettings">
++    <option name="autoReloadType" value="SELECTIVE" />
++  </component>
+   <component name="ChangeListManager">
+     <list default="true" id="a3ff6148-0f89-46e9-abfa-da2e567e06bb" name="변경" comment="">
+-      <change beforePath="$PROJECT_DIR$/multi-thread-elevator" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/../elevator/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../elevator/src/main/java/Main.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+     <option name="LAST_RESOLUTION" value="IGNORE" />
+   </component>
++  <component name="ExternalProjectsData">
++    <projectState path="$PROJECT_DIR$">
++      <ProjectState />
++    </projectState>
++  </component>
++  <component name="ExternalProjectsManager">
++    <system id="GRADLE">
++      <state>
++        <projects_view>
++          <tree_state>
++            <expand />
++            <select />
++          </tree_state>
++        </projects_view>
++      </state>
++    </system>
++  </component>
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+   </component>
+@@ -23,7 +44,7 @@
+     "RunOnceActivity.OpenProjectViewOnStart": "true",
+     "RunOnceActivity.ShowReadmeOnStart": "true",
+     "WebServerToolWindowFactoryState": "false",
+-    "last_opened_file_path": "C:/Users/zalcl/OneDrive/문서/project/java-study/multi-thread-elevator",
++    "last_opened_file_path": "/Users/s4ng/java-study/multi-thread-elevator",
+     "settings.editor.selected.configurable": "MTConfigurable"
+   }
+ }]]></component>
+@@ -36,6 +57,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1659069669103</updated>
+       <workItem from="1659069670357" duration="75000" />
++      <workItem from="1663549818860" duration="37000" />
+     </task>
+     <servers />
+   </component>
