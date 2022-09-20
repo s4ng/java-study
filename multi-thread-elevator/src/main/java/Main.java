@@ -24,7 +24,7 @@ public class Main {
 		ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor( 3, 3, 0, TimeUnit.SECONDS, blockingQueue );
 
 		while ( !waitingQueue.isEmpty() ) {
-			threadPoolExecutor.execute( new Task( waitingQueue.poll() ) );
+			threadPoolExecutor.execute( new ElevatorTask( waitingQueue.poll() ) );
 		}
 
 		while ( true ) {
@@ -65,7 +65,7 @@ public class Main {
 	}
 
 	@AllArgsConstructor
-	static class Task implements Runnable {
+	static class ElevatorTask implements Runnable {
 
 		private final Waiting waiting;
 
@@ -159,7 +159,6 @@ public class Main {
 	}
 
 	private static void printDashBoard( Elevator e1, Elevator e2, Elevator e3 ) {
-		int one, two, three;
 		clearScreen();
 		printLine();
 		for ( int i = 10; i >= 1; i-- ) {
@@ -178,6 +177,8 @@ public class Main {
 		System.out.println( "[최근 이벤트]" );
 		if ( logs.size() > 0 ) {
 			System.out.println( logs.get( logs.size() - 1 ) );
+		} else {
+			System.out.println( "-" );
 		}
 	}
 
